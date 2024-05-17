@@ -1,0 +1,91 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 92vh;
+    background-image: url("./assets/pexels-souvenirpixels-417074.jpg");
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    background-blend-mode: multiply;
+    z-index: 1;
+}
+
+#myForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 20%;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    z-index: 3;
+}
+
+#myForm>h1 {
+    color: white;
+    font-size: 2.25em;
+    padding: 10%;
+    font-family: "Reddit Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    /* margin-bottom: 10%; */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 50%;
+    margin-bottom: 10%;
+}
+
+.form-group>.form-control {
+    width: 100%;
+    height: 25%;
+    /* height: 2em; */
+    border-radius: 15px;
+    border: none;
+    /* padding: 5%; */
+    margin-bottom: 5%;
+    background-color: rgba(255, 255, 255, 0.714);
+    font-family: "Reddit Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.form-group>.mySubmit {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #7baabe;
+    width: 100%;
+    height: 25%;
+    border-radius: 15px;
+    border: none;
+    font-family: "Reddit Sans", sans-serif;
+    font-optical-sizing: auto;
+    /* font-weight: 400; */
+    font-style: normal;
+    font-size: large;
+}
+
+.form-group>.mySubmit:hover {
+    background-color: rgb(89, 144, 144)
+}
+
+.hidden-form {
+    display: none;
+}
+
+#myForm.active {
+    display: none;
+}
