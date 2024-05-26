@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+
+    <div class="gallery">
+        <div class="item">
+            <img src="{{ url_for('static', filename='assets/natura_1.jpg') }}" alt="Nature" class="img-fluid" />
+            <div class="image-name"></div>
+        </div>
+        <div class="item">
+            <img src="{{ url_for('static', filename='assets/natura_2.jpg') }}" alt="Nature" class="img-fluid" />
+            <div class="image-name"></div>
+        </div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var photoNames = ["natura_1", "natura_2", "portrait_3", "street_4"];
+        var galleryItems = document.querySelectorAll('.gallery .item');
+
+        galleryItems.forEach((item, index) => {
+            var imageNameDiv = item.querySelector('.image-name');
+            var photoName = photoNames[index];
+
+            if (photoName) {
+                var link = document.createElement('a');
+                link.href = '#';
+                link.textContent = photoName;
+                imageNameDiv.appendChild(link);
+
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var img = document.createElement('img');
+                    img.src = '{{ url_for("static", filename="assets/") }}' + photoName + '.jpg';
+                    img.alt = photoName;
+                    var modalContent = document.createElement('div');
+                    modalContent.classList.add('my-modal');
+                    modalContent.appendChild(img);
+                    var mainContainer = document.querySelector('.main-container');
+                    mainContainer.appendChild(modalContent);
+
+                    // Close the modal when clicked
+                    modalContent.addEventListener('click', function () {
+                        mainContainer.removeChild(modalContent);
+                    });
+                });
+            }
+        });
+    });
+</script>
+<style>
+    .my-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .my-modal img {
+        max-width: 90%;
+        max-height: 90%;
+    }
+</style>
+{% endblock %}

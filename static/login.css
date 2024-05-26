@@ -89,3 +89,11 @@
 #myForm.active {
     display: none;
 }
+
+.hidden-form {
+    display: none;
+}
+
+.active {
+    display: block;
+}

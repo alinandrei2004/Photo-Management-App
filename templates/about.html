@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}About Me{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="about_main">
+    <div class="poza-prof"><img src="{{ url_for('static', filename='assets/5472d1b09d3d724228109d381d617326.jpg') }}"
+            alt="Nature" class="img-fluid" />
+    </div>
+    <div class="about_text">
+        <h1>Alin Andrei Abăhnencei</h1>
+        <p>With a camera in hand and a passion for life, Alin turns ordinary moments into extraordinary
+            memories. Get ready to smile, laugh, and maybe even shed a tear as you explore the world through
+            unique perspectives!
+        </p>
+    </div>
+</div>
+<div class="about_main_bottom">
+    <div class="about_text_bottom">
+        <h1>FotoHive</h1>
+        <p>Designed for both amateur enthusiasts and seasoned professionals, our platform offers seamless
+            organization, effortless sharing, and powerful editing tools to elevate your photography experience.
+        </p>
+    </div>
+    <div class="poza-prof_bottom"><img
+            src="{{ url_for('static', filename='assets/5472d1b09d3d724228109d381d617326.jpg') }}" alt="Nature"
+            class="img-fluid" />
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+{% endblock %}
