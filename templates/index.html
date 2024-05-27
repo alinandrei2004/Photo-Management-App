@@ -8,78 +8,75 @@
 
 {% block content %}
 <div class="main-container">
-
     <div class="gallery">
+        {% for picture in pictures %}
         <div class="item">
-            <img src="{{ url_for('static', filename='assets/natura_1.jpg') }}" alt="Nature" class="img-fluid" />
-            <div class="image-name"></div>
+            <!-- Add an ID to the image for easy reference -->
+            <img id="picture_{{ picture.filename }}"
+                src="{{ url_for('static', filename='uploads/' ~ picture.filename) }}" alt="{{ picture.name }}" />
+            <button class="image-name-btn" onclick="toggleDetails('{{ picture.filename }}')">{{ picture.name }}</button>
+            {% if session['username'] == 'admin' %}
+            <button class="delete-btn" onclick="confirmDelete('{{ picture.filename }}')">Delete</button>
+            {% endif %}
+            <div id="details_{{ picture.filename }}" class="details"
+                style="display: none; position: absolute;top:0%; left:0%; z-index: 1; width: 100%; height: 100%; background-color: #7baabe;">
+                <div class="details-content"
+                    style="display: flex; flex-direction: column; justify-content: space-around; align-items: center;">
+                    <img id="picture_{{ picture.filename }}"
+                        src="{{ url_for('static', filename='uploads/' ~ picture.filename) }}" alt="{{ picture.name }}"
+                        style="width: 25vw; height: 40vh; position:initial; margin: 2%;" />
+                    <p>Details for {{ picture.name }}</p>
+                    <p>Category: {{ picture.category }}</p>
+                    <p>Uploaded by: {{ picture.username }}</p>
+                    <button class="close-btn" onclick="closeDetails('{{ picture.filename }}')"
+                        style="width: 20%;">Close</button>
+                </div>
+            </div>
         </div>
-        <div class="item">
-            <img src="{{ url_for('static', filename='assets/natura_2.jpg') }}" alt="Nature" class="img-fluid" />
-            <div class="image-name"></div>
-        </div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
+        {% endfor %}
     </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
-{{ super() }}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var photoNames = ["natura_1", "natura_2", "portrait_3", "street_4"];
-        var galleryItems = document.querySelectorAll('.gallery .item');
+    function toggleDetails(filename) {
+        var detailsDiv = document.getElementById('details_' + filename);
+        if (detailsDiv.style.display === 'none') {
+            detailsDiv.style.display = 'block';
+        } else {
+            detailsDiv.style.display = 'none';
+        }
+    }
 
-        galleryItems.forEach((item, index) => {
-            var imageNameDiv = item.querySelector('.image-name');
-            var photoName = photoNames[index];
-
-            if (photoName) {
-                var link = document.createElement('a');
-                link.href = '#';
-                link.textContent = photoName;
-                imageNameDiv.appendChild(link);
-
-                link.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    var img = document.createElement('img');
-                    img.src = '{{ url_for("static", filename="assets/") }}' + photoName + '.jpg';
-                    img.alt = photoName;
-                    var modalContent = document.createElement('div');
-                    modalContent.classList.add('my-modal');
-                    modalContent.appendChild(img);
-                    var mainContainer = document.querySelector('.main-container');
-                    mainContainer.appendChild(modalContent);
-
-                    // Close the modal when clicked
-                    modalContent.addEventListener('click', function () {
-                        mainContainer.removeChild(modalContent);
-                    });
+    function confirmDelete(filename) {
+        if (confirm('Are you sure you want to delete this picture?')) {
+            // Send request to Flask backend to delete the picture
+            fetch(`/delete_picture/${filename}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Picture deleted successfully, reload the page to reflect changes
+                        window.location.reload();
+                    } else {
+                        // Display error message
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-            }
-        });
-    });
-</script>
-<style>
-    .my-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        }
     }
 
-    .my-modal img {
-        max-width: 90%;
-        max-height: 90%;
+    function closeDetails(filename) {
+        var detailsDiv = document.getElementById('details_' + filename);
+        detailsDiv.style.display = 'none';
     }
-</style>
+</script>
+
 {% endblock %}
