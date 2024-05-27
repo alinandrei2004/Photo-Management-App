@@ -1,15 +1,19 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
+from PIL import Image
 import os
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # For session management
 
 UPLOAD_FOLDER = 'static/uploads'
+THUMBNAIL_FOLDER = 'static/thumbnails'  # New folder for thumbnails
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['THUMBNAIL_FOLDER'] = THUMBNAIL_FOLDER
 
-# Ensure the upload folder exists
+# Ensure the upload and thumbnail folders exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(THUMBNAIL_FOLDER, exist_ok=True)
 
 # Mocked pictures list to hold uploaded picture details
 pictures = [
@@ -19,9 +23,18 @@ pictures = [
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def create_thumbnail(source_path, target_path, size=(100, 100)):
+    try:
+        with Image.open(source_path) as img:
+            img.thumbnail(size)
+            img.save(target_path)
+    except Exception as e:
+        print(f"Error creating thumbnail: {e}")
+
 @app.route("/", methods=['GET'])
 def index():
-    return render_template("index.html", title="FotoHive", pictures=pictures)
+    thumbnails = [{'filename': pic['filename'], 'name': pic['name']} for pic in pictures]
+    return render_template("index.html", title="FotoHive", pictures=thumbnails)
 
 @app.route("/aboutme")
 def about_me():
@@ -36,19 +49,33 @@ def upload():
         if 'picture' not in request.files:
             flash('No file part')
             return redirect(request.url)
+        
         file = request.files['picture']
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
+        
         if file and allowed_file(file.filename):
-            filename = request.form['filename']
-            if not filename:
-                filename = file.filename
+            filename = request.form['filename'] if request.form['filename'] else file.filename
             category = request.form.get('category', 'uncategorized')
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # Save original image
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+
+            # Create and save thumbnail
+            thumbnail_path = os.path.join(app.config['THUMBNAIL_FOLDER'], filename)
+            create_thumbnail(file_path, thumbnail_path)
+
             pictures.append({'filename': filename, 'name': filename, 'category': category})
             return redirect(url_for('index'))
+        
+        flash('Invalid file type')
+        return redirect(request.url)
+
+    # If method is not POST, render the upload form
     return render_template("upload.html", title="Upload Picture")
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

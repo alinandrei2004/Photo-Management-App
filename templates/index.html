@@ -11,25 +11,26 @@
     <div class="gallery">
         {% for picture in pictures %}
         <div class="item">
-            <!-- Add an ID to the image for easy reference -->
             <img id="picture_{{ picture.filename }}"
                 src="{{ url_for('static', filename='uploads/' ~ picture.filename) }}" alt="{{ picture.name }}" />
-            <button class="image-name-btn" onclick="toggleDetails('{{ picture.filename }}')">{{ picture.name }}</button>
+            <button class="image-name-btn btn btn-secondary butonul_meu"
+                onclick="toggleDetails('{{ picture.filename }}')">{{ picture.name }}</button>
             {% if session['username'] == 'admin' %}
-            <button class="delete-btn" onclick="confirmDelete('{{ picture.filename }}')">Delete</button>
+            <button class="delete-btn btn btn-secondary butonul_meu"
+                onclick="confirmDelete('{{ picture.filename }}')">Delete</button>
             {% endif %}
             <div id="details_{{ picture.filename }}" class="details"
                 style="display: none; position: absolute;top:0%; left:0%; z-index: 1; width: 100%; height: 100%; background-color: #7baabe;">
                 <div class="details-content"
-                    style="display: flex; flex-direction: column; justify-content: space-around; align-items: center;">
+                    style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; height: 100%;">
                     <img id="picture_{{ picture.filename }}"
                         src="{{ url_for('static', filename='uploads/' ~ picture.filename) }}" alt="{{ picture.name }}"
-                        style="width: 25vw; height: 40vh; position:initial; margin: 2%;" />
-                    <p>Details for {{ picture.name }}</p>
-                    <p>Category: {{ picture.category }}</p>
-                    <p>Uploaded by: {{ picture.username }}</p>
-                    <button class="close-btn" onclick="closeDetails('{{ picture.filename }}')"
-                        style="width: 20%;">Close</button>
+                        style="width: 30vw; height: 45vh; position:initial; margin: 2%; margin-bottom: 0;" />
+                    <p>Details for <span>{{ picture.name }}</span></p>
+                    <p>Category: <span>{{ picture.category|capitalize }}</span></p>
+                    <p>Uploaded by: <span>Admin</span></p>
+                    <button class="my-close-btn btn btn-secondary butonul_meu"
+                        onclick="closeDetails('{{ picture.filename }}')">Close</button>
                 </div>
             </div>
         </div>

@@ -114,15 +114,61 @@ header>.navbar>.container-fluid {
 .item {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     width: 95%;
-    height: 30vh;
+    height: 35vh;
     margin: 0;
     padding: 0;
     border-radius: 5px;
     background-color: #bcd6e3;
     margin: 2%;
+}
+
+.item>.delete-btn {
+    background-color: red;
+    border-color: red;
+    height: 12.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.item>.image-name-btn {
+    background-color: #7baabe;
+    border-color: #7baabe;
+    height: 12.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.details-content>.my-close-btn {
+    background-color: red;
+    border-color: red;
+    height: 5%;
+    width: 12.5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.details-content>p {
+    font-size: 1.5em;
+    padding: 1%;
+    padding-bottom: 0;
+    font-family: "Reddit Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    margin: 0;
+}
+
+.details-content>p>span {
+    font-weight: bolder;
 }
 
 .item>img {
